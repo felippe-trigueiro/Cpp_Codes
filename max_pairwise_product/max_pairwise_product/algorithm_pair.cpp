@@ -1,6 +1,7 @@
 #include <vector>
 using std::vector;
 
+//The two algorithms bellow calculates the maximum pairwise product of a set of integers.
 long long MaxPairwiseProduct(const vector<int>& numbers) {
 	long long result = 0;
 	int n = numbers.size();

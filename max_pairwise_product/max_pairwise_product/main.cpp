@@ -1,6 +1,18 @@
+//This project implements two algorithm of the maximum pairwise product problem. This problem consists of given a sequence
+//of integers, return the maximum product of a pair contained in that sequence.
+
+//The actual code implemented two algorithms - a naive and a faster. The functions MaxPairwiseProduct - faster 
+//and MaxPairwiseProduct_Naive - naive do this job.
+
+//The auxiliary function measureTimeAlgorithm, as the name saids, measure the time required to process the functions. 
+//This function receives the sequence which the user desires and a code representing the algorithm - 0 for the faster 
+//and 1 for the naive algoritm.
+
+//The actual code generate a random number for testing 
 #include <iostream>
 #include <vector>
 #include <chrono>
+#include <random>
 
 using std::vector;
 using std::cin;
@@ -9,33 +21,32 @@ using std::cout;
 long long MaxPairwiseProduct(const vector<int>&);
 long long MaxPairwiseProduct_Naive(const vector<int>&);
 
+long long measureTimeAlgorithm(const vector<int>&, int);
+
+const int max = 50;
+
 int main() {
-	int n;
-	cin >> n;
+	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
+	std::default_random_engine e(seed);
+	int n = e() % max;
 	vector<int> numbers(n);
 	for (int i = 0; i < n; ++i) {
-		cin >> numbers[i];
+		numbers[i] = e() % max;
 	}
 	
-	//Measuring the time of the fast algorithm
-	auto start = std::chrono::high_resolution_clock::now();
-	long long result_fast = MaxPairwiseProduct(numbers);
-	auto finish = std::chrono::high_resolution_clock::now();
+	cout << "Sequence: \n";
+	for (int i = 0; i < numbers.size(); i++)
+		cout << numbers[i] << "\n";
+	cout << "\n";
 
-	std::chrono::duration<double> elapsed_fast = finish - start;
-
-	//Measuring the time of the naive algorithm
-	auto start_naive = std::chrono::high_resolution_clock::now();
-	long long result_naive = MaxPairwiseProduct_Naive(numbers);
-	auto finish_naive = std::chrono::high_resolution_clock::now();
-
-	std::chrono::duration<double> elapsed_naive = finish_naive - start_naive;
-
-	cout << "Fast result: " << result_fast << "\n";
-	cout << "Time of the fast algorithm " << elapsed_fast.count() << "\n\n";
-
-	cout << "Naive result: " << result_naive << "\n";
-	cout << "Time of the naive algorithm " << elapsed_naive.count() << "\n\n";
+	long long result_fast = measureTimeAlgorithm(numbers, 0);
+	long long result_naive = measureTimeAlgorithm(numbers, 1);
+	
+	if (result_fast == result_naive)
+		cout << "OK!\n\n";
+	else
+		cout << "Something is wrong.\n\n";
+	
 	system("pause");
 	return 0;
 }
